@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import TaskControls from "./components/TaskControls";
 import TaskForm from "./components/TaskForm";
 import TaskList, { type Task } from "./components/TaskList";
-import { getStoredTasks, updateLocalStorage } from "./utils/localStorageUtils";
+import { getStoredTasks } from "./utils/localStorageUtils";
+import { taskReducer } from "./reducers/taskReducers";
 export type UpdateTaskArguments = {
   taskId: number;
   editText: string;
@@ -10,31 +11,21 @@ export type UpdateTaskArguments = {
 };
 
 const App = () => {
-  const [tasks, setTasks] = useState(getStoredTasks());
+  const [tasks, dispatch] = useReducer(taskReducer, getStoredTasks());
   const [showOnlyIncomplete, setShowOnlyIncomplete] = useState(false);
   const addTask = (newTask: Task) => {
-    const updatedTasks = [...tasks, newTask];
-    setTasks(updatedTasks);
-    updateLocalStorage(updatedTasks);
+    dispatch({ type: "ADD", payload: newTask });
   };
   const sortTasks = () => {
-    const sortedTasks = [...tasks].sort((a, b) => a.priority - b.priority);
-    setTasks(sortedTasks);
-    updateLocalStorage(sortedTasks);
+    dispatch({ type: "SORT" });
   };
 
   const removeTask = (id: number) => {
-    const filteredTasks = tasks.filter((task) => task.id !== id);
-    setTasks(filteredTasks);
-    updateLocalStorage(filteredTasks);
+    dispatch({ type: "REMOVE", payload: id });
   };
 
   const toggleTaskDone = (id: number) => {
-    const toggleTasks = tasks.map((task) =>
-      task.id === id ? { ...task, done: !task.done } : task
-    );
-    setTasks(toggleTasks);
-    updateLocalStorage(toggleTasks);
+    dispatch({ type: "TOGGLE", payload: id });
   };
 
   const updateTask = ({
@@ -42,14 +33,7 @@ const App = () => {
     editText,
     editPriority,
   }: UpdateTaskArguments) => {
-    const updatedTasks = tasks.map((task) =>
-      task.id === taskId
-        ? { ...task, text: editText, priority: editPriority }
-        : task
-    );
-
-    setTasks(updatedTasks);
-    updateLocalStorage(updatedTasks);
+    dispatch({ type: "UPDATE", payload: { taskId, editText, editPriority } });
   };
 
   return (

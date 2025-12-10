@@ -18,6 +18,18 @@ const App = () => {
     const sortedTasks = [...tasks].sort((a, b) => a.priority - b.priority);
     setTasks(sortedTasks);
   };
+
+  const removeTask = (id: number) => {
+    const filteredTasks = tasks.filter((task) => task.id !== id);
+    setTasks(filteredTasks);
+  };
+
+  const toggleTaskDone = (id: number) => {
+    const toggleTasks = tasks.map((task) =>
+      task.id === id ? { ...task, done: !task.done } : task
+    );
+    setTasks(toggleTasks);
+  };
   return (
     <div
       style={{
@@ -34,7 +46,12 @@ const App = () => {
         setShowOnlyIncomplete={setShowOnlyIncomplete}
         sortTasks={sortTasks}
       />
-      <TaskList showOnlyIncomplete={showOnlyIncomplete} tasks={tasks} />
+      <TaskList
+        toggleTaskDone={toggleTaskDone}
+        showOnlyIncomplete={showOnlyIncomplete}
+        tasks={tasks}
+        removeTask={removeTask}
+      />
     </div>
   );
 };

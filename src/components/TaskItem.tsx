@@ -2,13 +2,16 @@ import { Pencil, Trash } from "lucide-react";
 import type { Task } from "./TaskList";
 type TaskItemProps = {
   task: Task;
+  toggleTaskDone: (id: number) => void;
+  removeTask: (id: number) => void;
 };
-const TaskItem = ({ task }: TaskItemProps) => {
+const TaskItem = ({ task, toggleTaskDone, removeTask }: TaskItemProps) => {
   return (
     <>
       <div style={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
         <input
           type="checkbox"
+          onChange={() => toggleTaskDone(task.id)}
           checked={task.done}
           style={{ marginRight: "10px" }}
         />
@@ -51,6 +54,7 @@ const TaskItem = ({ task }: TaskItemProps) => {
           <Pencil />
         </button>
         <button
+          onClick={() => removeTask(task.id)}
           style={{
             borderRadius: "50%",
             backgroundColor: "#dc3545",

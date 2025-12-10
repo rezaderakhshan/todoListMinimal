@@ -3,6 +3,8 @@ import TaskItem from "./TaskItem";
 type TaskListProps = {
   tasks: Task[];
   showOnlyIncomplete: boolean;
+  toggleTaskDone: (id: number) => void;
+  removeTask: (id: number) => void;
 };
 
 export type Task = {
@@ -11,7 +13,12 @@ export type Task = {
   priority: number;
   done: boolean;
 };
-const TaskList = ({ tasks, showOnlyIncomplete }: TaskListProps) => {
+const TaskList = ({
+  tasks,
+  showOnlyIncomplete,
+  toggleTaskDone,
+  removeTask,
+}: TaskListProps) => {
   return (
     <ul>
       {tasks
@@ -28,7 +35,11 @@ const TaskList = ({ tasks, showOnlyIncomplete }: TaskListProps) => {
               gap: "10px",
             }}
           >
-            <TaskItem task={task} />
+            <TaskItem
+              removeTask={removeTask}
+              toggleTaskDone={toggleTaskDone}
+              task={task}
+            />
           </li>
         ))}
     </ul>

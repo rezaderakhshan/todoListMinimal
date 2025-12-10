@@ -4,8 +4,14 @@ type TaskItemProps = {
   task: Task;
   toggleTaskDone: (id: number) => void;
   removeTask: (id: number) => void;
+  setEditingTaskId: React.Dispatch<React.SetStateAction<number | null>>;
 };
-const TaskItem = ({ task, toggleTaskDone, removeTask }: TaskItemProps) => {
+const TaskItem = ({
+  task,
+  toggleTaskDone,
+  removeTask,
+  setEditingTaskId,
+}: TaskItemProps) => {
   return (
     <>
       <div style={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
@@ -42,6 +48,7 @@ const TaskItem = ({ task, toggleTaskDone, removeTask }: TaskItemProps) => {
       </div>
       <div style={{ display: "flex", gap: "5px" }}>
         <button
+          onClick={() => setEditingTaskId(task.id)}
           style={{
             borderRadius: "50%",
             backgroundColor: "#ffc107",

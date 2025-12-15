@@ -1,20 +1,18 @@
 import { Check } from "lucide-react";
 import type { Task } from "./TaskList";
 import { useState } from "react";
-import type { UpdateTaskArguments } from "../App";
+import { useTaskActions } from "../contexts/TaskContext";
 
 type EditTaskFormProps = {
   task: Task;
   setEditingTaskId: React.Dispatch<React.SetStateAction<number | null>>;
-  updateTask: ({ editText, taskId, editPriority }: UpdateTaskArguments) => void;
 };
-const EditTaskForm = ({
-  task,
-  setEditingTaskId,
-  updateTask,
-}: EditTaskFormProps) => {
+const EditTaskForm = ({ task, setEditingTaskId }: EditTaskFormProps) => {
   const [editText, setEditText] = useState(task.text);
   const [editPriority, setEditPriority] = useState(task.priority);
+  const taskActions = useTaskActions();
+  if (!taskActions) throw new Error("used outside the provider");
+  const { updateTask } = taskActions;
 
   const saveEdit = () => {
     if (editText.trim()) {

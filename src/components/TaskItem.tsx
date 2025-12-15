@@ -1,17 +1,19 @@
 import { Pencil, Trash } from "lucide-react";
 import type { Task } from "./TaskList";
+import { useTaskActions } from "../contexts/TaskContext";
 type TaskItemProps = {
   task: Task;
-  toggleTaskDone: (id: number) => void;
-  removeTask: (id: number) => void;
+
   setEditingTaskId: React.Dispatch<React.SetStateAction<number | null>>;
 };
 const TaskItem = ({
   task,
-  toggleTaskDone,
-  removeTask,
+
   setEditingTaskId,
 }: TaskItemProps) => {
+  const taskActions = useTaskActions();
+  if (!taskActions) throw new Error("used outside the provider");
+  const { removeTask, toggleTaskDone } = taskActions;
   return (
     <>
       <div style={{ display: "flex", alignItems: "center", flexGrow: 1 }}>

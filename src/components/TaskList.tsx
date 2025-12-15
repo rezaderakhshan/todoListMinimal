@@ -1,14 +1,10 @@
 import { useState } from "react";
 import TaskItem from "./TaskItem";
 import EditTaskForm from "./EditTaskForm";
-import type { UpdateTaskArguments } from "../App";
 
 type TaskListProps = {
   tasks: Task[];
   showOnlyIncomplete: boolean;
-  toggleTaskDone: (id: number) => void;
-  removeTask: (id: number) => void;
-  updateTask: ({ editText, taskId, editPriority }: UpdateTaskArguments) => void;
 };
 
 export type Task = {
@@ -17,14 +13,9 @@ export type Task = {
   priority: number;
   done: boolean;
 };
-const TaskList = ({
-  tasks,
-  showOnlyIncomplete,
-  toggleTaskDone,
-  removeTask,
-  updateTask,
-}: TaskListProps) => {
+const TaskList = ({ tasks, showOnlyIncomplete }: TaskListProps) => {
   const [editingTaskId, setEditingTaskId] = useState<null | number>(null);
+
   return (
     <ul>
       {tasks
@@ -42,18 +33,9 @@ const TaskList = ({
             }}
           >
             {editingTaskId === task.id ? (
-              <EditTaskForm
-                updateTask={updateTask}
-                setEditingTaskId={setEditingTaskId}
-                task={task}
-              />
+              <EditTaskForm setEditingTaskId={setEditingTaskId} task={task} />
             ) : (
-              <TaskItem
-                removeTask={removeTask}
-                toggleTaskDone={toggleTaskDone}
-                setEditingTaskId={setEditingTaskId}
-                task={task}
-              />
+              <TaskItem setEditingTaskId={setEditingTaskId} task={task} />
             )}
           </li>
         ))}
